@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.guangda.mapper.LinkmanMapper">
+  <resultMap id="BaseResultMap" type="com.example.guangda.entity.Linkman">
+    <id column="PreCustomerNo" jdbcType="INTEGER" property="precustomerno" />
+    <id column="LinkOrderNo" jdbcType="INTEGER" property="linkorderno" />
+    <result column="LinkMan" jdbcType="VARCHAR" property="linkman" />
+    <result column="Mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="Birthday" jdbcType="DATE" property="birthday" />
+    <result column="Depart" jdbcType="VARCHAR" property="depart" />
+    <result column="Post" jdbcType="VARCHAR" property="post" />
+    <result column="Email" jdbcType="VARCHAR" property="email" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PreCustomerNo, LinkOrderNo, LinkMan, Mobile, Phone, Birthday, Depart, Post, Email
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.example.guangda.entity.LinkmanKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from linkman
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+      and LinkOrderNo = #{linkorderno,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteLinkman" parameterType="com.example.guangda.entity.LinkmanKey">
+    delete from linkman
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+  </delete>
+  <insert id="addLinkman" keyColumn="PreCustomerNo" keyProperty="precustomerno" parameterType="com.example.guangda.entity.Linkman" useGeneratedKeys="true">
+    insert into linkman (PreCustomerNo,LinkOrderNo, LinkMan, Mobile,
+      Phone, Birthday, Depart, 
+      Post, Email)
+    values (#{precustomerno,jdbcType=INTEGER},#{linkorderno,jdbcType=INTEGER}, #{linkman,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+      #{phone,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, #{depart,jdbcType=VARCHAR}, 
+      #{post,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.guangda.entity.Linkman">
+    update linkman
+    <set>
+      <if test="linkman != null">
+        LinkMan = #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        Mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        Phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        Birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="depart != null">
+        Depart = #{depart,jdbcType=VARCHAR},
+      </if>
+      <if test="post != null">
+        Post = #{post,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        Email = #{email,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+      and LinkOrderNo = #{linkorderno,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.guangda.entity.Linkman">
+    update linkman
+    set LinkMan = #{linkman,jdbcType=VARCHAR},
+      Mobile = #{mobile,jdbcType=VARCHAR},
+      Phone = #{phone,jdbcType=VARCHAR},
+      Birthday = #{birthday,jdbcType=DATE},
+      Depart = #{depart,jdbcType=VARCHAR},
+      Post = #{post,jdbcType=VARCHAR},
+      Email = #{email,jdbcType=VARCHAR}
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+      and LinkOrderNo = #{linkorderno,jdbcType=INTEGER}
+  </update>
+</mapper>

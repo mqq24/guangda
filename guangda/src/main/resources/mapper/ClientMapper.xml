@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.guangda.mapper.ClientMapper">
+  <resultMap id="BaseResultMap" type="com.example.guangda.entity.Client">
+    <id column="PreCustomerNo" jdbcType="INTEGER" property="precustomerno" />
+    <result column="PreCustomerName" jdbcType="VARCHAR" property="precustomername" />
+    <result column="insure" jdbcType="VARCHAR" property="insure" />
+    <result column="IDType" jdbcType="VARCHAR" property="idtype" />
+    <result column="BusiCategory" jdbcType="VARCHAR" property="busicategory" />
+    <result column="GrpNature" jdbcType="VARCHAR" property="grpnature" />
+    <result column="IDNo" jdbcType="VARCHAR" property="idno" />
+    <result column="SumNumPeople" jdbcType="INTEGER" property="sumnumpeople" />
+    <result column="PreSumPeople" jdbcType="INTEGER" property="presumpeople" />
+    <result column="Province" jdbcType="VARCHAR" property="province" />
+    <result column="City" jdbcType="VARCHAR" property="city" />
+    <result column="County" jdbcType="VARCHAR" property="county" />
+    <result column="DetailAddress" jdbcType="VARCHAR" property="detailaddress" />
+    <collection property="linkman" ofType="com.example.guangda.entity.Linkman">
+      <id column="PreCustomerNo" jdbcType="INTEGER" property="precustomerno" />
+      <id column="LinkOrderNo" jdbcType="INTEGER" property="linkorderno" />
+      <result column="LinkMan" jdbcType="VARCHAR" property="linkman" />
+      <result column="Mobile" jdbcType="VARCHAR" property="mobile" />
+      <result column="Phone" jdbcType="VARCHAR" property="phone" />
+      <result column="Birthday" jdbcType="DATE" property="birthday" />
+      <result column="Depart" jdbcType="VARCHAR" property="depart" />
+      <result column="Post" jdbcType="VARCHAR" property="post" />
+      <result column="Email" jdbcType="VARCHAR" property="email" />
+    </collection>
+  </resultMap>
+
+  <select id="selectClientList" resultMap="BaseResultMap" parameterType="com.example.guangda.entity.Client">
+    select * from client c left join linkman l on c.PreCustomerNo = l.PreCustomerNo
+    <where>
+        <if test="nameMobileId != null">
+          and c.PreCustomerNo like concat("%",#{nameMobileId},"%") or l.mobile like concat("%",#{nameMobileId},"%") or c.idno like concat("%",#{nameMobileId},"%")
+        </if>
+    </where>
+  </select>
+
+  <select id="gatselectClientList" resultMap="BaseResultMap" parameterType="int">
+    select * from client c left join linkman l on c.PreCustomerNo = l.PreCustomerNo where c.PreCustomerNo = #{PreCustomerNo}
+  </select>
+
+  <delete id="deleteClient" parameterType="java.lang.Integer">
+    delete from client
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+  </delete>
+  <insert id="addClient" keyColumn="PreCustomerNo" keyProperty="precustomerno" parameterType="com.example.guangda.entity.Client" useGeneratedKeys="true">
+    insert into client (PreCustomerNo,PreCustomerName, insure, IDType,
+      BusiCategory, GrpNature, IDNo, 
+      SumNumPeople, PreSumPeople, Province, 
+      City, County, DetailAddress
+      )
+    values (#{precustomerno,jdbcType=VARCHAR},#{precustomername,jdbcType=VARCHAR}, #{insure,jdbcType=VARCHAR}, #{idtype,jdbcType=VARCHAR},
+      #{busicategory,jdbcType=VARCHAR}, #{grpnature,jdbcType=VARCHAR}, #{idno,jdbcType=VARCHAR}, 
+      #{sumnumpeople,jdbcType=INTEGER}, #{presumpeople,jdbcType=INTEGER}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{detailaddress,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.guangda.entity.Client">
+    update client
+    set PreCustomerName = #{precustomername,jdbcType=VARCHAR},
+      insure = #{insure,jdbcType=VARCHAR},
+      IDType = #{idtype,jdbcType=VARCHAR},
+      BusiCategory = #{busicategory,jdbcType=VARCHAR},
+      GrpNature = #{grpnature,jdbcType=VARCHAR},
+      IDNo = #{idno,jdbcType=VARCHAR},
+      SumNumPeople = #{sumnumpeople,jdbcType=INTEGER},
+      PreSumPeople = #{presumpeople,jdbcType=INTEGER},
+      Province = #{province,jdbcType=VARCHAR},
+      City = #{city,jdbcType=VARCHAR},
+      County = #{county,jdbcType=VARCHAR},
+      DetailAddress = #{detailaddress,jdbcType=VARCHAR}
+    where PreCustomerNo = #{precustomerno,jdbcType=INTEGER}
+  </update>
+</mapper>
